@@ -14,17 +14,19 @@ if (crypto && crypto.getRandomValues) {
 
 function randomBytes (size, cb) {
   // in browserify, this is becomes an extended UInt8Array
-  var bytes = new Buffer(size)
+  var bytes = new Uint8Array(size)
 
   // This will not work in older browsers.
   // See https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues
   crypto.getRandomValues(bytes)
 
+  var out = new Buffer(bytes)
+
   if (typeof cb === 'function') {
     return process.nextTick(function () {
-      cb(null, bytes)
+      cb(null, out)
     })
   }
 
-  return bytes
+  return out 
 }
